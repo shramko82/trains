@@ -79,7 +79,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
      public void numberOfTripsFrom_A_To_B_withExactStopsOf_1_ShouldEquals_1() {
         int expected = 1;
-        int actual = townHandler.getNumberOfTrips("A", "B", 1, StopLimitTypes.EQUALS);
+        int actual = townHandler.getNumberOfTrips("A", "B", 1, LimitTypes.EQUALS, LimitsBy.STOPS);
 
         assertEquals(expected, actual);
     }
@@ -87,7 +87,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
     public void numberOfTripsFrom_A_To_C_withExactStopsOf_2_ShouldEquals_2() {
         int expected = 2;
-        int actual = townHandler.getNumberOfTrips("A", "C", 2, StopLimitTypes.EQUALS);
+        int actual = townHandler.getNumberOfTrips("A", "C", 2, LimitTypes.EQUALS, LimitsBy.STOPS);
 
         assertEquals(expected, actual);
     }
@@ -95,7 +95,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
     public void numberOfTripsFrom_C_To_C_withMaximumStopsOf_3_ShouldEquals_2() {
         int expected = 2;
-        int actual = townHandler.getNumberOfTrips("C", "C", 3, StopLimitTypes.LESS_OR_EQUALS);
+        int actual = townHandler.getNumberOfTrips("C", "C", 3, LimitTypes.LESS_OR_EQUALS, LimitsBy.STOPS);
 
         assertEquals(expected, actual);
     }
@@ -103,7 +103,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
     public void numberOfTripsFrom_A_To_C_withExactStopsOf_4_ShouldEquals_3() {
         int expected = 3;
-        int actual = townHandler.getNumberOfTrips("A", "C", 4, StopLimitTypes.EQUALS);
+        int actual = townHandler.getNumberOfTrips("A", "C", 4, LimitTypes.EQUALS, LimitsBy.STOPS);
 
         assertEquals(expected, actual);
     }
@@ -135,7 +135,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
     public void numberOfRoutesFrom_A_To_B_WithDistanceLessThan_15_ShouldEquals_4() {
         int expected = 4;
-        int actual = townHandler.numberOfRoutes("A", "B", 15, StopLimitTypes.LESS);
+        int actual = townHandler.getNumberOfTrips("A", "B", 15, LimitTypes.LESS, LimitsBy.DISTANCE);
 
         assertEquals(expected, actual);
     }
@@ -143,7 +143,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
     public void numberOfRoutesFrom_C_To_C_WithDistanceLessThan_30_ShouldEquals_7() {
         int expected = 7;
-        int actual = townHandler.numberOfRoutes("C", "C", 30, StopLimitTypes.LESS);
+        int actual = townHandler.getNumberOfTrips("C", "C", 30, LimitTypes.LESS, LimitsBy.DISTANCE);
 
         assertEquals(expected, actual);
     }
