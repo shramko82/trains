@@ -1,4 +1,4 @@
-package ua.shramko.trains;
+package ua.shramko.trains.enums;
 
 public enum LimitsBy {
     STOPS, DISTANCE

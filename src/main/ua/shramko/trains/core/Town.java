@@ -1,4 +1,4 @@
-package ua.shramko.trains;
+package ua.shramko.trains.core;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ public class Town {
     }
 
     public Set<Town> getDestinations() {
-        Set<Town> destinations = new HashSet<Town>();
+        Set<Town> destinations = new HashSet<>();
         for (Route route : getRoutes().values()) {
             destinations.add(route.getDestination());
         }

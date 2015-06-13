@@ -1,4 +1,4 @@
-package ua.shramko.trains;
+package ua.shramko.trains.core;
 
 public class Route {
     private Town destination;

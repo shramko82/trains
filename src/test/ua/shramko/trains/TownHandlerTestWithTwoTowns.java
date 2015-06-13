@@ -2,6 +2,9 @@ package ua.shramko.trains;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ua.shramko.trains.core.Route;
+import ua.shramko.trains.core.Town;
+import ua.shramko.trains.handlers.RoutesHandler;
 
 import static org.junit.Assert.assertEquals;
 
