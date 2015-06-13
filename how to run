@@ -1,0 +1,11 @@
+To run this program you need to open the project in IDE (eclipse, Idea)
+Then you need to run class /main/ua/shramko/trains/Main.java
+After the message "Enter the routes graph" please enter the route graph to console in the format:
+"AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7"
+Where the towns are named using the first few letters of the alphabet from A to D.  A route between two towns (A to B) with a distance of 5 is represented as AB5.
+Route distance may be any integer number.
+Routes should be separated by ", "
+
+Then press ENTER
+
+Output information you will see also in console.

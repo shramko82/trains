@@ -5,7 +5,7 @@ import ua.shramko.trains.enums.CompareTypes;
 import ua.shramko.trains.enums.LimitsBy;
 import ua.shramko.trains.finders.DictanceFinder;
 import ua.shramko.trains.finders.NumberOfTripsFinder;
-import ua.shramko.trains.finders.ShortestRouteFinder;
+import ua.shramko.trains.finders.ShortestDistanceFinder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class RoutesHandler {
                 townTo = new Town(keyTo);
                 towns.put(keyTo,townTo);
             }
-            int distance = Integer.parseInt(node.substring(2,3));
+            int distance = Integer.parseInt(node.substring(2));
             townFrom.addRoute(keyTo, townTo, distance);
         }
     }
@@ -56,7 +56,7 @@ public class RoutesHandler {
     }
 
     public int calculateShortestRoute(String from, String to) {
-        return new ShortestRouteFinder(this, from, to).calculate();
+        return new ShortestDistanceFinder(this, from, to).calculate();
     }
 
     public int getNumberOfTrips(String from, String to, int limit, CompareTypes limitType, LimitsBy limitBy) {

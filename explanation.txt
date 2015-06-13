@@ -1,0 +1,26 @@
+For object model I decided to use:
+ - Town - represent nodes of the graph
+ - Route (as composition of destination Town and distance) - represents edges of the graph
+both classes you may find in /core.
+
+All existing routes I decide to store in special class
+ - RoutesHandler (/handlers ).
+This class also in charge of getting different information about the routes.
+
+All kinds of information needed may be separated to 3 main scopes:
+1. Finding distance for exact trip
+2. Finding the shortest distance from one town to another
+3. Finding the number of trips by some condition
+For these purpose there are created 3 service classes:
+ - DictanceFinder
+ - ShortestDistanceFinder
+ - NumberOfTripsFinder
+ these classes are connected via interface:
+ - Finder
+ and they all putted to folder /finders
+
+ For determining conditions of finding the numbers of trips from point One to point To
+  created special enums:
+  - LimitsBy - for determinigs either DISTANCE condition or number of STOPS condition
+  - CompareTypes - for determining compare conditions (LESS, LESS_OR_EQUALS, EQUALS)
+  enums are put into /enums folder

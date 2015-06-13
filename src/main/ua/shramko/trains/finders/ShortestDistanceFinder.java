@@ -8,12 +8,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ShortestRouteFinder implements Finder {
+public class ShortestDistanceFinder implements Finder {
     RoutesHandler routes;
     String from;
     String to;
 
-    public ShortestRouteFinder(RoutesHandler routes, String from, String to) {
+    public ShortestDistanceFinder(RoutesHandler routes, String from, String to) {
         this.routes = routes;
         this.from = from;
         this.to = to;
