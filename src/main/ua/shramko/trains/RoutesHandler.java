@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class TownHandler {
+public class RoutesHandler {
     Map<String, Town> towns;
 
-    public TownHandler() {
+    public RoutesHandler() {
         towns = new HashMap();
     }
 
@@ -103,15 +103,12 @@ public class TownHandler {
         int numberOfTrips = 0;
         Set<Town> currentTowns = new HashSet<Town>();
         currentTowns.add(getTown(from));
-        Set<String> currentTrips = new HashSet<String>();
-        currentTrips.add(from);
         Map<String, Integer> routeDistances = new HashMap<String, Integer>();
         routeDistances.put(from, 0);
         while(true) {
             int minDistanceAtThisScope = Integer.MAX_VALUE;
             numberOfStops++;
             Set<Town> destinations = new HashSet<Town>();
-            Set<String> newTrips = new HashSet<String>();
             Map<String, Integer> newRouteDistances = new HashMap<String, Integer>();
 
             for (Town currentTown : currentTowns) {
@@ -120,20 +117,17 @@ public class TownHandler {
                     destinations.add(currentDestination);
                     String currentKey = currentTown.getKey();
                     String destinationKey = currentDestination.getKey();
-                    addTripsToSet(currentTrips, newTrips, currentKey, destinationKey);
                     int currentDistance = addTripsToMap(routeDistances, newRouteDistances, currentKey, destinationKey);
                     minDistanceAtThisScope = Math.min(minDistanceAtThisScope,currentDistance);
-                    if (destinationKey.equals(to)) {
-                        if (limitBy == LimitsBy.STOPS && checkForIterate(numberOfStops, limit, limitType)) {
-                            numberOfTrips += getTripsFromSetEndsWith(currentTrips, currentKey);
-                        }
-                    }
                 }
             }
             if (limitBy == LimitsBy.DISTANCE) {
                 numberOfTrips += calculateDistances(newRouteDistances, to, limit, limitType);
             }
-            currentTrips = newTrips;
+            if (limitBy == LimitsBy.STOPS && checkForIterate(numberOfStops, limit, limitType)) {
+                numberOfTrips += getTripsFromSetEndsWith(newRouteDistances.keySet(), to);
+            }
+
             currentTowns = destinations;
             routeDistances = newRouteDistances;
             int valueForBreakCheking = (limitBy == LimitsBy.DISTANCE) ? minDistanceAtThisScope : numberOfStops;
@@ -156,12 +150,19 @@ public class TownHandler {
         return number;
     }
 
-    private void addTripsToSet(Set<String> trips, Set<String> newTrips, String currentKey, String destinationKey) {
-        for (String trip : trips) {
-            if (currentKey.equals(trip.substring(trip.length()-1))) {
-               newTrips.add(trip.concat(destinationKey));
+    private int calculateDistances(Map<String, Integer> routeDistances, String currentKey, int limit, LimitTypes limitType) {
+        int result = 0;
+        for (String trip : routeDistances.keySet()) {
+            String lastTownKey = trip.substring(trip.length()-1);
+            if (currentKey.equals(lastTownKey)) {
+                int distance = routeDistances.get(trip);
+                if (checkForIterate(distance,limit,limitType)) {
+                    result++;
+                }
             }
         }
+
+        return result;
     }
 
     private boolean checkForIterate(int number, int limiter, LimitTypes stopLimitType) {
@@ -199,18 +200,5 @@ public class TownHandler {
         return minDistance;
     }
 
-    private int calculateDistances(Map<String, Integer> routeDistances, String currentKey, int limit, LimitTypes limitType) {
-        int result = 0;
-        for (String trip : routeDistances.keySet()) {
-            String lastTownKey = trip.substring(trip.length()-1);
-            if (currentKey.equals(lastTownKey)) {
-                int distance = routeDistances.get(trip);
-                if (checkForIterate(distance,limit,limitType)) {
-                    result++;
-                }
-            }
-        }
 
-        return result;
-    }
 }
