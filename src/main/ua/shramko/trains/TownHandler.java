@@ -119,18 +119,21 @@ public class TownHandler {
         }
     }
 
-    private boolean checkForIterate(int numberOfStops, int limiter, StopLimitTypes stopLimitType) {
-        if ((numberOfStops <= limiter && stopLimitType == StopLimitTypes.LESS_OR_EQUALS)
-                || (numberOfStops == limiter && stopLimitType == StopLimitTypes.EQUALS)) {
+    private boolean checkForIterate(int number, int limiter, StopLimitTypes stopLimitType) {
+        if ((number <= limiter && stopLimitType == StopLimitTypes.LESS_OR_EQUALS)
+                || (number == limiter && stopLimitType == StopLimitTypes.EQUALS)
+                || (number < limiter && stopLimitType == StopLimitTypes.LESS)) {
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean checkForBreak(int numberOfTrips, int limiter, StopLimitTypes stopLimitType) {
-        if (numberOfTrips == limiter &&
+    private boolean checkForBreak(int number, int limit, StopLimitTypes stopLimitType) {
+        if (number >= limit &&
                 (stopLimitType == StopLimitTypes.EQUALS ||stopLimitType == StopLimitTypes.LESS_OR_EQUALS )) {
+            return true;
+        } else if (number >= limit-1 && stopLimitType == StopLimitTypes.LESS) {
             return true;
         } else {
             return false;
@@ -138,8 +141,96 @@ public class TownHandler {
     }
 
     public int calculateShortestRoute(String from, String to) {
+        int shorterDistance = Integer.MAX_VALUE;
+        Map<String, Integer> routeDistances = new HashMap<String, Integer>();
+        routeDistances.put(from,0);
+        Set<Town> currentTowns = new HashSet<Town>();
+        currentTowns.add(getTown(from));
+        while(true) {
+            int minDistanceAtThisScope = Integer.MAX_VALUE;
+            Set<Town> destinations = new HashSet<Town>();
+            Map<String, Integer> newRouteDistances = new HashMap<String, Integer>();
+            for (Town currentTown : currentTowns) {
+                Set<Town> currentDestinations = currentTown.getDestinations();
+                for (Town currentDestination : currentDestinations) {
+                    destinations.add(currentDestination);
+                    String currentKey = currentTown.getKey();
+                    String destinationKey = currentDestination.getKey();
+                    int currentDistance = addTripsToMap(routeDistances, newRouteDistances, currentKey, destinationKey);
+                    minDistanceAtThisScope = Math.min(minDistanceAtThisScope,currentDistance);
+                    if (destinationKey.equals(to)) {
+                        shorterDistance = Math.min(shorterDistance,currentDistance);
+                    }
+                }
+            }
+            routeDistances = newRouteDistances;
+            currentTowns = destinations;
+            if (minDistanceAtThisScope >= shorterDistance) {
+                break;
+            }
+        }
 
 
-        return 0;
+        return shorterDistance;
+    }
+
+    private int addTripsToMap(Map<String, Integer> routeDistances, Map<String, Integer> newRouteDistances, String currentKey, String destinationKey) {
+        int minDistance = Integer.MAX_VALUE;
+        for (String trip : routeDistances.keySet()) {
+            String lastTownKey = trip.substring(trip.length()-1);
+            if (currentKey.equals(lastTownKey)) {
+                String newTrip = trip.concat(destinationKey);
+                int distance = routeDistances.get(trip) + getTown(lastTownKey).getRoute(destinationKey).getDistance();
+                newRouteDistances.put(newTrip,distance);
+                minDistance = Math.min(minDistance,distance);
+            }
+        }
+        return minDistance;
+    }
+
+    public int numberOfRoutes(String from, String to, int limit, StopLimitTypes limitType) {
+        int result = 0;
+        Map<String, Integer> routeDistances = new HashMap<String, Integer>();
+        routeDistances.put(from, 0);
+        Set<Town> currentTowns = new HashSet<Town>();
+        currentTowns.add(getTown(from));
+        while(true) {
+            int minDistanceAtThisScope = Integer.MAX_VALUE;
+            Set<Town> destinations = new HashSet<Town>();
+            Map<String, Integer> newRouteDistances = new HashMap<String, Integer>();
+            for (Town currentTown : currentTowns) {
+                Set<Town> currentDestinations = currentTown.getDestinations();
+                for (Town currentDestination : currentDestinations) {
+                    destinations.add(currentDestination);
+                    String currentKey = currentTown.getKey();
+                    String destinationKey = currentDestination.getKey();
+                    int currentDistance = addTripsToMap(routeDistances, newRouteDistances, currentKey, destinationKey);
+                    minDistanceAtThisScope = Math.min(minDistanceAtThisScope,currentDistance);
+                }
+            }
+            result += calculateDistances(newRouteDistances,to,limit,limitType);
+            routeDistances = newRouteDistances;
+            currentTowns = destinations;
+            if (checkForBreak(minDistanceAtThisScope,limit,limitType)) {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    private int calculateDistances(Map<String, Integer> routeDistances, String currentKey, int limit, StopLimitTypes limitType) {
+        int result = 0;
+        for (String trip : routeDistances.keySet()) {
+            String lastTownKey = trip.substring(trip.length()-1);
+            if (currentKey.equals(lastTownKey)) {
+                int distance = routeDistances.get(trip);
+                if (checkForIterate(distance,limit,limitType)) {
+                    result++;
+                }
+            }
+        }
+
+        return result;
     }
 }

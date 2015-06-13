@@ -16,6 +16,8 @@ public class Main {
         System.out.println(townHandler.getFormattedDistance("A-E-D"));
         System.out.println(townHandler.getNumberOfTrips("C", "C", 3, StopLimitTypes.LESS_OR_EQUALS));
         System.out.println(townHandler.getNumberOfTrips("A", "C", 4, StopLimitTypes.EQUALS));
-
+        System.out.println(townHandler.calculateShortestRoute("A", "C"));
+        System.out.println(townHandler.calculateShortestRoute("B", "B"));
+        System.out.println(townHandler.numberOfRoutes("C", "C", 30, StopLimitTypes.LESS));
     }
 }

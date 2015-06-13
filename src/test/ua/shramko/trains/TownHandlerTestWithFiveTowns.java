@@ -123,4 +123,28 @@ public class TownHandlerTestWithFiveTowns {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void shortestRouteFrom_B_To_B_ShouldEquals_9() {
+        int expected = 9;
+        int actual = townHandler.calculateShortestRoute("B", "B");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void numberOfRoutesFrom_A_To_B_WithDistanceLessThan_15_ShouldEquals_4() {
+        int expected = 4;
+        int actual = townHandler.numberOfRoutes("A", "B", 15, StopLimitTypes.LESS);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void numberOfRoutesFrom_C_To_C_WithDistanceLessThan_30_ShouldEquals_7() {
+        int expected = 7;
+        int actual = townHandler.numberOfRoutes("C", "C", 30, StopLimitTypes.LESS);
+
+        assertEquals(expected, actual);
+    }
 }
