@@ -1,9 +1,9 @@
-For object model I decided to use:
+Object model is represented by next classes:
  - Town - represent nodes of the graph
  - Route (as composition of destination Town and distance) - represents edges of the graph
 both classes you may find in /core.
 
-All existing routes I decide to store in special class
+All existing routes are stored in special class
  - RoutesHandler (/handlers ).
 This class also in charge of getting different information about the routes.
 
