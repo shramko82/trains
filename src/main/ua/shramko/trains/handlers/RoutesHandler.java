@@ -3,7 +3,7 @@ package ua.shramko.trains.handlers;
 import ua.shramko.trains.core.Town;
 import ua.shramko.trains.enums.CompareTypes;
 import ua.shramko.trains.enums.LimitsBy;
-import ua.shramko.trains.finders.DictanceFinder;
+import ua.shramko.trains.finders.DistanceFinder;
 import ua.shramko.trains.finders.NumberOfTripsFinder;
 import ua.shramko.trains.finders.ShortestDistanceFinder;
 
@@ -47,7 +47,7 @@ public class RoutesHandler {
     }
 
     public int getDistance(String fullRoute) {
-        return new DictanceFinder(this, fullRoute).calculate();
+        return new DistanceFinder(this, fullRoute).calculate();
     }
 
     public String getFormattedDistance(String fullRoute) {

@@ -4,11 +4,11 @@ import ua.shramko.trains.core.Route;
 import ua.shramko.trains.core.Town;
 import ua.shramko.trains.handlers.RoutesHandler;
 
-public class DictanceFinder implements Finder {
+public class DistanceFinder implements Finder {
     RoutesHandler routes;
     String fullRoute;
 
-    public DictanceFinder(RoutesHandler routes, String fullRoute) {
+    public DistanceFinder(RoutesHandler routes, String fullRoute) {
         this.routes = routes;
         this.fullRoute = fullRoute;
     }
