@@ -4,23 +4,23 @@ import java.util.*;
 
 public class Town {
     String key;
-    Map<String, Route> routes;
+    Map<Town, Route> routes;
 
     public Town(String key) {
         this.key = key;
-        routes = new HashMap<String, Route>();
+        routes = new HashMap<Town, Route>();
     }
 
     public String getKey() {
         return key;
     }
 
-    public Map<String, Route> getRoutes() {
+    public Map<Town, Route> getRoutes() {
         return routes;
     }
 
-    public Route getRoute(String key) {
-        return routes.get(key);
+    public Route getRoute(Town destination) {
+        return routes.get(destination);
     }
 
     public Set<Town> getDestinations() {
@@ -31,8 +31,8 @@ public class Town {
         return destinations;
     }
 
-    public void addRoute(String key, Town destination, int distance) {
+    public void addRoute(Town destination, int distance) {
         Route route = new Route(destination, distance);
-        routes.put(key, route);
+        routes.put(destination, route);
     }
 }

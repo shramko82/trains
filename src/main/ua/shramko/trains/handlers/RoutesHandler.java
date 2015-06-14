@@ -1,9 +1,9 @@
 package ua.shramko.trains.handlers;
 
 import ua.shramko.trains.core.Town;
+import ua.shramko.trains.core.Trip;
 import ua.shramko.trains.enums.CompareTypes;
 import ua.shramko.trains.enums.LimitsBy;
-import ua.shramko.trains.finders.DistanceFinder;
 import ua.shramko.trains.finders.NumberOfTripsFinder;
 import ua.shramko.trains.finders.ShortestDistanceFinder;
 
@@ -42,12 +42,12 @@ public class RoutesHandler {
                 towns.put(keyTo,townTo);
             }
             int distance = Integer.parseInt(node.substring(2));
-            townFrom.addRoute(keyTo, townTo, distance);
+            townFrom.addRoute(townTo, distance);
         }
     }
 
     public int getDistance(String fullRoute) {
-        return new DistanceFinder(this, fullRoute).calculate();
+        return new Trip(this, fullRoute).getDistance();
     }
 
     public String getFormattedDistance(String fullRoute) {

@@ -1,9 +1,10 @@
 Object model is represented by next classes:
  - Town - represent nodes of the graph
  - Route (as composition of destination Town and distance) - represents edges of the graph
-both classes you may find in /core.
+ - Trip - for trips which is contains of several routes
+these classes you may find in /core.
 
-All existing routes are stored in special class
+All existing towns are stored in special class
  - RoutesHandler (/handlers ).
 This class also in charge of getting different information about the routes.
 
@@ -11,8 +12,8 @@ All kinds of information needed may be separated to 3 main scopes:
 1. Finding distance for exact trip
 2. Finding the shortest distance from one town to another
 3. Finding the number of trips by some condition
-For these purpose there are created 3 service classes:
- - DictanceFinder
+Distance for the whole trip contains in class Trip
+For the next 2 points there are created 2 service classes:
  - ShortestDistanceFinder
  - NumberOfTripsFinder
  these classes are connected via interface:

@@ -51,7 +51,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
     public void TownA_DestinationB_ShouldBeEquals_TownB() {
         Town expectedTown = routesHandler.getTown("B");
-        Town actualTown = routesHandler.getTown("A").getRoute("B").getDestination();
+        Town actualTown = routesHandler.getTown("A").getRoute(expectedTown).getDestination();
 
         assertEquals(expectedTown, actualTown);
     }
@@ -59,7 +59,7 @@ public class TownHandlerTestWithFiveTowns {
     @Test
     public void TownC_DestinationE_ShouldBeEquals_TownE() {
         Town expectedTown = routesHandler.getTown("E");
-        Town actualTown = routesHandler.getTown("C").getRoute("E").getDestination();
+        Town actualTown = routesHandler.getTown("C").getRoute(expectedTown).getDestination();
 
         assertEquals(expectedTown, actualTown);
     }

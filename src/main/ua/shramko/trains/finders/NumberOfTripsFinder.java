@@ -1,13 +1,12 @@
 package ua.shramko.trains.finders;
 
 import ua.shramko.trains.core.Town;
+import ua.shramko.trains.core.Trip;
 import ua.shramko.trains.enums.CompareTypes;
 import ua.shramko.trains.enums.LimitsBy;
 import ua.shramko.trains.handlers.RoutesHandler;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class NumberOfTripsFinder implements Finder {
@@ -32,33 +31,29 @@ public class NumberOfTripsFinder implements Finder {
         int numberOfTrips = 0;
         Set<Town> currentTowns = new HashSet<>();
         currentTowns.add(routes.getTown(from));
-        Map<String, Integer> routeDistances = new HashMap<>();
-        routeDistances.put(from, 0);
+        Set<Trip> trips = new HashSet<>();
+        trips.add(new Trip(routes,from));
         while(true) {
-            int minDistanceAtThisScope = Integer.MAX_VALUE;
             numberOfStops++;
             Set<Town> destinations = new HashSet<>();
-            Map<String, Integer> newRouteDistances = new HashMap<>();
+            Set<Trip> newTrips = new HashSet<>();
 
             for (Town currentTown : currentTowns) {
                 Set<Town> currentDestinations = currentTown.getDestinations();
                 for (Town currentDestination : currentDestinations) {
                     destinations.add(currentDestination);
-                    String currentKey = currentTown.getKey();
-                    String destinationKey = currentDestination.getKey();
-                    int currentDistance = addTripsToMap(routeDistances, newRouteDistances, currentKey, destinationKey);
-                    minDistanceAtThisScope = Math.min(minDistanceAtThisScope,currentDistance);
+                    addTrips(trips, newTrips, currentTown, currentDestination);
                 }
             }
             if (limitBy == LimitsBy.DISTANCE) {
-                numberOfTrips += calculateTrips(newRouteDistances, to, limit, limitType);
+                numberOfTrips += calculateTrips(newTrips, routes.getTown(to), limit, limitType);
             }
             if (limitBy == LimitsBy.STOPS && checkForIterate(numberOfStops, limit, limitType)) {
-                numberOfTrips += getTripsFromSetEndsWith(newRouteDistances.keySet(), to);
+                numberOfTrips += getTripsEndsWith(newTrips, routes.getTown(to));
             }
-
+            int minDistanceAtThisScope = getMinDistance(newTrips);
             currentTowns = destinations;
-            routeDistances = newRouteDistances;
+            trips = newTrips;
             int valueForBreakChecking = (limitBy == LimitsBy.DISTANCE) ? minDistanceAtThisScope : numberOfStops;
             if (checkForBreak(valueForBreakChecking, limit, limitType)) {
                 break;
@@ -66,6 +61,51 @@ public class NumberOfTripsFinder implements Finder {
         }
 
         return numberOfTrips;
+    }
+
+    private int getMinDistance(Set<Trip> trips) {
+        int minDistance = Integer.MAX_VALUE;
+        for (Trip trip : trips) {
+            minDistance = Math.min(minDistance, trip.getDistance());
+        }
+        return minDistance;
+    }
+
+    private void addTrips(Set<Trip> trips, Set<Trip> newTrips, Town currentTown, Town currentDestination) {
+        for (Trip trip : trips) {
+            Town lastTown = trip.getLastTown();
+            if (currentTown == lastTown) {
+                Trip newTrip = trip.addDestination(currentDestination);
+                newTrips.add(newTrip);
+            }
+        }
+    }
+
+    private int calculateTrips(Set<Trip> trips, Town destination, int limit, CompareTypes limitType) {
+        int result = 0;
+        for (Trip trip : trips) {
+            Town lastTown = trip.getLastTown();
+            if (lastTown == destination) {
+                int distance = trip.getDistance();
+                if (checkForIterate(distance,limit,limitType)) {
+                    result++;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private int getTripsEndsWith(Set<Trip> trips, Town destination) {
+        int number = 0;
+        for (Trip trip : trips) {
+            Town lastTown = trip.getLastTown();
+            if (lastTown == destination) {
+                number++;
+            }
+        }
+
+        return number;
     }
 
     private boolean checkForIterate(int number, int limiter, CompareTypes stopLimitType) {
@@ -89,43 +129,4 @@ public class NumberOfTripsFinder implements Finder {
         }
     }
 
-    private int addTripsToMap(Map<String, Integer> routeDistances, Map<String, Integer> newRouteDistances, String currentKey, String destinationKey) {
-        int minDistance = Integer.MAX_VALUE;
-        for (String trip : routeDistances.keySet()) {
-            String lastTownKey = trip.substring(trip.length()-1);
-            if (currentKey.equals(lastTownKey)) {
-                String newTrip = trip.concat(destinationKey);
-                int distance = routeDistances.get(trip) + routes.getTown(lastTownKey).getRoute(destinationKey).getDistance();
-                newRouteDistances.put(newTrip,distance);
-                minDistance = Math.min(minDistance,distance);
-            }
-        }
-        return minDistance;
-    }
-
-    private int getTripsFromSetEndsWith(Set<String> currentTrips, String currentKey) {
-        int number = 0;
-        for (String trip : currentTrips) {
-            if (currentKey.equals(trip.substring(trip.length()-1))) {
-                number++;
-            }
-        }
-
-        return number;
-    }
-
-    private int calculateTrips(Map<String, Integer> routeDistances, String currentKey, int limit, CompareTypes limitType) {
-        int result = 0;
-        for (String trip : routeDistances.keySet()) {
-            String lastTownKey = trip.substring(trip.length()-1);
-            if (currentKey.equals(lastTownKey)) {
-                int distance = routeDistances.get(trip);
-                if (checkForIterate(distance,limit,limitType)) {
-                    result++;
-                }
-            }
-        }
-
-        return result;
-    }
 }
