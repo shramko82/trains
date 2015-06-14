@@ -45,6 +45,10 @@ public class NumberOfTripsFinder implements Finder {
                     addTrips(trips, newTrips, currentTown, currentDestination);
                 }
             }
+            currentTowns = destinations;
+            trips = newTrips;
+
+
             if (limitBy == LimitsBy.DISTANCE) {
                 numberOfTrips += calculateTrips(newTrips, routes.getTown(to), limit, limitType);
             }
@@ -52,8 +56,7 @@ public class NumberOfTripsFinder implements Finder {
                 numberOfTrips += getTripsEndsWith(newTrips, routes.getTown(to));
             }
             int minDistanceAtThisScope = getMinDistance(newTrips);
-            currentTowns = destinations;
-            trips = newTrips;
+
             int valueForBreakChecking = (limitBy == LimitsBy.DISTANCE) ? minDistanceAtThisScope : numberOfStops;
             if (checkForBreak(valueForBreakChecking, limit, limitType)) {
                 break;
