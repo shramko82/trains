@@ -1,21 +1,33 @@
-Object model is represented by 2 classes:
+First of all, we need some entity to collect basic information.
+Let it be Towns and Routes.
+Town will be represented by its name or key string
+Town will store collection of routes where this town is departure point.
+Route will be composition of destination town and distance.
+So we need 2 classes to store these entities:
  - Town - represent nodes of the graph
  - Route (as composition of destination Town and distance) - represents edges of the graph
 these classes you may find in /core.
 
-There are also 2 service classes in folder /services:
- - TripService - to contain the trip as several routes one-by-one. This class also can calculate the distance of the trip.
- - TownService - this class contains the map of the towns.
+Of course, we need to store all towns in some collection mapped by its name or key string.
+For this purpose HashMap is the best decision.
+So lets add the class which will store the map of towns and call it:
+ - TownService
+ Let this object be response of creating all towns and routes from the input string.
 
-The main class which connects all the classes and is able to ask any class to information needed for user:
- - RoutesHandler (/handlers ).
+ We also need to connect several routes to one trip.
+ Let add class
+  - TripService
+  and let this class to store array of towns where we will stop during our trip.
+  Let also this class be able to calculate the distance of trip.
 
-All kinds of information needed for user may be separated to 3 main scopes:
+  We put these 2 classes in package /services.
+
+All kinds of information needed for user may be separated to 3 kinds:
 1. Finding distance for exact trip
 2. Finding the shortest distance from one town to another
 3. Finding the number of trips by some condition
 
-Distance for the whole trip calculated and stored in class TripService
+Distance for the whole trip already calculated in class TripService
 For the next points there are 2 service classes created:
  - ShortestDistanceFinder
  - NumberOfTripsFinder
@@ -24,7 +36,14 @@ For the next points there are 2 service classes created:
  and they all putted to folder /finders
 
  For determining conditions of finding the numbers of trips from point One to point To
-  created special enums:
-  - LimitsBy - for determinigs either DISTANCE condition or number of STOPS condition required
-  - CompareTypes - for determining compare conditions (LESS, LESS_OR_EQUALS, EQUALS).
-  Enums are put into /enums folder
+   created special enums:
+   - LimitsBy - for determinigs either DISTANCE condition or number of STOPS condition required
+   - CompareTypes - for determining compare conditions (LESS, LESS_OR_EQUALS, EQUALS).
+   Enums are put into /enums folder
+
+At the last we need some special class that is able to ask any other classes for some information.
+Let it be class:
+ - RoutesHandler (/handlers ).
+All user interaction will be via this class.
+
+
