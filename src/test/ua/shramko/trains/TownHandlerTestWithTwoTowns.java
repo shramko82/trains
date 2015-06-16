@@ -5,26 +5,29 @@ import org.junit.Test;
 import ua.shramko.trains.core.Route;
 import ua.shramko.trains.core.Town;
 import ua.shramko.trains.handlers.RoutesHandler;
+import ua.shramko.trains.services.TownService;
 
 import static org.junit.Assert.assertEquals;
 
 public class TownHandlerTestWithTwoTowns {
     static String inputString;
     static RoutesHandler routesHandler;
+    static TownService townService;
 
     @BeforeClass
     public static void initialize() {
         inputString = "AB5";
         routesHandler = new RoutesHandler();
-        routesHandler.fillRoutes(inputString);
+        townService = new TownService();
+        townService.fillRoutes(inputString);
     }
 
     @Test
      public void shouldBeTwoTownsInTownsMap() {
-        routesHandler.getTowns();
+        townService.getTowns();
 
         int expectedMapSize = 2;
-        int actualMapSize = routesHandler.getTowns().size();
+        int actualMapSize = townService.getTowns().size();
 
         assertEquals(expectedMapSize, actualMapSize);
     }
@@ -33,10 +36,10 @@ public class TownHandlerTestWithTwoTowns {
     public void shouldBeOneRoute() {
         int expectedRoutes = 1;
         int actualRoutes = 0;
-        for (Town town : routesHandler.getTowns().values()) {
+        for (Town town : townService.getTowns().values()) {
             actualRoutes+=town.getRoutes().size();
         }
-        routesHandler.getTowns().size();
+        townService.getTowns().size();
 
         assertEquals(expectedRoutes, actualRoutes);
     }
@@ -44,15 +47,15 @@ public class TownHandlerTestWithTwoTowns {
     @Test
     public void townA_ShouldHaveOneRoute() {
         int expectedSize = 1;
-        int actualSize = routesHandler.getTown("A").getRoutes().size();
+        int actualSize = townService.getTown("A").getRoutes().size();
 
         assertEquals(expectedSize, actualSize);
     }
 
     @Test
     public void townA_DestinationB_ShouldBeEquals_TownB() {
-        Town expectedTown = routesHandler.getTown("B");
-        Town actualTown = routesHandler.getTown("A").getRoute(expectedTown).getDestination();
+        Town expectedTown = townService.getTown("B");
+        Town actualTown = townService.getTown("A").getRoute(expectedTown).getDestination();
 
         assertEquals(expectedTown, actualTown);
     }
@@ -60,7 +63,7 @@ public class TownHandlerTestWithTwoTowns {
     @Test
     public void townA_RouteC_ShouldBeEquals_Null() {
         Route expectedRoute = null;
-        Route actualRoute = routesHandler.getTown("A").getRoute(routesHandler.getTown("C"));
+        Route actualRoute = townService.getTown("A").getRoute(townService.getTown("C"));
 
         assertEquals(expectedRoute, actualRoute);
     }
@@ -68,7 +71,7 @@ public class TownHandlerTestWithTwoTowns {
     @Test
     public void distance_A_B_ShouldEquals_5() {
         int expectedDistance = 5;
-        int actualDistance = routesHandler.getDistance("A-B");
+        int actualDistance = routesHandler.getDistance(townService, "A-B");
 
         assertEquals(expectedDistance, actualDistance);
     }
@@ -76,7 +79,7 @@ public class TownHandlerTestWithTwoTowns {
     @Test
     public void distance_A_C_ShouldEquals_0() {
         int expectedDistance = 0;
-        int actualDistance = routesHandler.getDistance("A-C");
+        int actualDistance = routesHandler.getDistance(townService, "A-C");
 
         assertEquals(expectedDistance, actualDistance);
     }

@@ -1,19 +1,22 @@
-Object model is represented by next classes:
+Object model is represented by 2 classes:
  - Town - represent nodes of the graph
  - Route (as composition of destination Town and distance) - represents edges of the graph
- - Trip - for trips which is contains of several routes
 these classes you may find in /core.
 
-All existing towns are stored in special class
- - RoutesHandler (/handlers ).
-This class also in charge of getting different information about the routes.
+There are also 2 service classes in folder /services:
+ - TripService - to contain the trip as several routes one-by-one. This class also can calculate the distance of the trip.
+ - TownService - this class contains the map of the towns.
 
-All kinds of information needed may be separated to 3 main scopes:
+The main class which connects all the classes and is able to ask any class to information needed for user:
+ - RoutesHandler (/handlers ).
+
+All kinds of information needed for user may be separated to 3 main scopes:
 1. Finding distance for exact trip
 2. Finding the shortest distance from one town to another
 3. Finding the number of trips by some condition
-Distance for the whole trip contains in class Trip
-For the next 2 points there are created 2 service classes:
+
+Distance for the whole trip calculated and stored in class TripService
+For the next points there are 2 service classes created:
  - ShortestDistanceFinder
  - NumberOfTripsFinder
  these classes are connected via interface:
@@ -22,6 +25,6 @@ For the next 2 points there are created 2 service classes:
 
  For determining conditions of finding the numbers of trips from point One to point To
   created special enums:
-  - LimitsBy - for determinigs either DISTANCE condition or number of STOPS condition
-  - CompareTypes - for determining compare conditions (LESS, LESS_OR_EQUALS, EQUALS)
-  enums are put into /enums folder
+  - LimitsBy - for determinigs either DISTANCE condition or number of STOPS condition required
+  - CompareTypes - for determining compare conditions (LESS, LESS_OR_EQUALS, EQUALS).
+  Enums are put into /enums folder
